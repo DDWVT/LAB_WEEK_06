@@ -28,4 +28,4 @@ imageLoader: ImageLoader, private val onClickListener:
 //    }
 }
 
-//lupa untuk commit no.1
+//lupa commit no.1
