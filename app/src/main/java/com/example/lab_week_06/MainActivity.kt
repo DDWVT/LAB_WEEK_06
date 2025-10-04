@@ -3,6 +3,7 @@ package com.example.lab_week_06
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab_week_06.model.CatBreed
@@ -14,25 +15,21 @@ class MainActivity: AppCompatActivity() {
         findViewById(R.id.recycler_view)
     }
     private val catAdapter by lazy {
-        //Glide is used here to Load the images
-        //Here we are passing the onClickListener function to the Adapter
         CatAdapter(layoutInflater, GlideImageLoader(this), object:
             CatViewHolder.OnClickListener {
-            //When this is triggered, the pop up dialog will be shown
             override fun onItemClick(cat: CatModel) = showSelectionDialog(cat)
         })
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //Setup the adapter for the recycler view
         recyclerView.adapter = catAdapter
-        //Setup the Layout manager for the recycler view
-        //A Layout manager is used to set the structure of the item views
-        //For this tutorial, we're using the vertical Linear structure
         recyclerView.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL, false)
-        //Add data to the model List in the adapter
+
+        val itemTouchHelper = ItemTouchHelper (catAdapter.swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         catAdapter.setData(
             listOf(
                 CatModel(
@@ -59,7 +56,6 @@ class MainActivity: AppCompatActivity() {
             )
         )
     }
-    //This will create a pop up dialog when one of the items from the recycler view is clicked..
     private fun showSelectionDialog(cat: CatModel) {
         AlertDialog.Builder(this)
             //Set the title for the dialog
